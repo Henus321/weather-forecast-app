@@ -11,6 +11,14 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css"
+    />
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"
+    ></script>
     <link rel="stylesheet" href="css/style.css" />
     <script defer src="js/controller.js" type="module"></script>
     <title>Weather Forecast App</title>
@@ -29,16 +37,16 @@
       <div class="row-container main">
         <div class="block-container">
           <div class="content">
-            <div class="content__main-info">
+            <!-- <div class="content__main-info">
               <h2>City</h2>
-              <span>current time</span>
+              <span>time</span>
               <div>
-                <span>15 deg</span>
+                <span>temperature°C, code </span>
                 <i class="fa-solid fa-sun"></i>
               </div>
-              <span>wind 3.2 m/s</span>
-            </div>
-            <div class="content__temp-hours">
+              <span>wind: 3.2m/s</span>
+            </div> -->
+            <!-- <div class="content__temp-hours">
               <div class="hour">
                 <span>13:00</span>
                 <span>Sun</span>
@@ -74,18 +82,19 @@
                 <span>Sun</span>
                 <span>+11</span>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
+        <div class="block-container map-container"></div>
+      </div>
+      <div class="row-container">
         <div class="block-container">
-          <div class="map">
-            <h2>MAP</h2>
-          </div>
+          <h3 class="weekdays-title">Weather forecast for 7 days</h3>
         </div>
       </div>
       <div class="row-container secondary">
-        <div class="block-container">
-          <div class="weekday">
+        <div class="block-container week-container">
+          <!-- <div class="weekday">
             <span>Today</span>
             <span>date</span>
             <span>desc-icon</span>
@@ -140,7 +149,7 @@
             <span>+11</span>
             <span>-2</span>
             <span>rainy</span>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

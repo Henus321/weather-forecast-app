@@ -1,0 +1,30 @@
+import View from './View.js';
+
+class MapView extends View {
+  _parentElement = document.querySelector('.map-container');
+
+  _generateMarkup() {
+    return `
+    <div class="map" id="map"></div>
+    `;
+  }
+
+  _loadCapitalMap(lat, lng) {
+    const map = L.map('map').setView([lat, lng], 10);
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png').addTo(
+      map
+    );
+  }
+
+  render(data) {
+    this._data = data;
+    const markup = this._generateMarkup();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+    this._loadCapitalMap(
+      this._data.currentLocation.latitude,
+      this._data.currentLocation.longitude
+    );
+  }
+}
+
+export default new MapView();
