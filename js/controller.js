@@ -8,13 +8,17 @@ const controlForecast = async function () {
   try {
     await model.loadForecast();
 
-    //temp
-    model.concatAll(model.state.forecast);
-
-    perHourView.render(model.state.forecast);
+    const hourlyCards = model.state.forecast.hourlyCardsData.time;
+    const testWeeksArray = model.state.forecast.testWeeks;
+    // const hourlyCardsData = model.state.forecast.hourlyCardsData;
     currentView.render(model.state.forecast);
-    weekView.render(model.state.forecast);
     mapView.render(model.state.forecast);
+    hourlyCards.forEach(function (_, idx) {
+      perHourView.render(model.state.forecast.hourlyCardsData, idx);
+    });
+    testWeeksArray.forEach(function (data) {
+      weekView.render(data);
+    });
   } catch (err) {
     console.log(err);
   }

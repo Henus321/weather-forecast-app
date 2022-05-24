@@ -9,7 +9,7 @@ class MapView extends View {
     `;
   }
 
-  _loadCapitalMap(lat, lng) {
+  _loadMap(lat, lng) {
     const map = L.map('map').setView([lat, lng], 10);
     L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png').addTo(
       map
@@ -20,7 +20,7 @@ class MapView extends View {
     this._data = data;
     const markup = this._generateMarkup();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
-    this._loadCapitalMap(
+    this._loadMap(
       this._data.currentLocation.latitude,
       this._data.currentLocation.longitude
     );

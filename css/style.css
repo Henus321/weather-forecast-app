@@ -99,6 +99,7 @@ body {
 
 .content__temp-hours {
   display: flex;
+  flex-direction: row-reverse;
   justify-content: center;
   align-items: center;
   border-radius: var(--secondary-border-radius);
@@ -137,6 +138,10 @@ body {
 
 .weekdays-title {
   margin: 0 5px;
+}
+
+.week-container {
+  flex-direction: row-reverse;
 }
 
 .weekday {
