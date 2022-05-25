@@ -1,17 +1,17 @@
 import View from './View.js';
 
 class WeekView extends View {
-  _parentElement = document.querySelector('.week-container');
+  _parentElement = document.querySelector('.week__content');
 
-  _generateMarkup(data) {
+  _generateMarkup(data, idx) {
+    const day = data.weekDay[idx];
+    const temperature = data.weekTemp[idx];
+
     return `
     <div class="weekday">
-        <span>Today${data}</span>
-        <span>date</span>
-        <span>desc-icon</span>
-        <span>+11</span>
-        <span>-2</span>
-        <span>rainy</span>
+        <span>${day}</span>
+        <span><i class="fa-solid fa-sun"></i></span>
+        <span>${temperature}°C</span>
       </div>
     `;
   }

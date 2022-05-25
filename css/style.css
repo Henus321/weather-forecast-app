@@ -87,7 +87,7 @@ body {
   background-color: black;
 }
 
-.content__main-info {
+.content__today {
   display: flex;
   flex-direction: column;
   border-radius: var(--secondary-border-radius);
@@ -97,7 +97,7 @@ body {
   background-color: wheat;
 }
 
-.content__temp-hours {
+.content__hourly {
   display: flex;
   flex-direction: row-reverse;
   justify-content: center;
@@ -112,6 +112,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  align-items: center;
   margin: 0 3px;
   padding: 5px;
   height: 95%;
@@ -140,8 +141,16 @@ body {
   margin: 0 5px;
 }
 
-.week-container {
+.week__content {
+  display: flex;
   flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--secondary-border-radius);
+  padding: 5px;
+  height: 100%;
+  width: 100%;
+  background-color: wheat;
 }
 
 .weekday {
@@ -155,4 +164,8 @@ body {
   width: 100%;
   background-color: black;
   color: white;
+}
+
+.fa-solid {
+  font-size: 24px;
 }

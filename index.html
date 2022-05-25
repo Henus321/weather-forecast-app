@@ -28,16 +28,17 @@
       <h2 class="title">Weather Forecast App</h2>
       <div class="row-container">
         <div class="block-container">
-          <div class="search">
-            <input type="text" />
+          <form class="search" id="search">
+            <input class="search__field" type="text" />
             <button>Search</button>
-          </div>
+          </form>
         </div>
       </div>
       <div class="row-container main">
         <div class="block-container">
           <div class="content">
-            <div class="content__temp-hours"></div>
+            <div class="content__today"></div>
+            <div class="content__hourly"></div>
           </div>
         </div>
         <div class="block-container map-container"></div>
@@ -48,7 +49,9 @@
         </div>
       </div>
       <div class="row-container secondary">
-        <div class="block-container week-container"></div>
+        <div class="block-container">
+          <div class="week__content"></div>
+        </div>
       </div>
     </div>
   </body>
