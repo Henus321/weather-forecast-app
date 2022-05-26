@@ -10,8 +10,8 @@ class TodayView extends View {
     );
     return `
         <h2>${this._data.currentLocation.name}</h2>
-        <span>${this._data.currentWeather.time}</span>
-        <div>
+        <span>${this._data.currentWeather.dayOfWeek} ${this._data.currentWeather.time}</span>
+        <div class="today-degrees">
         <span>${this._data.currentWeather.temperature}°C</span>
         <span>${weatherIcon}</span>
         </div>

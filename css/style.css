@@ -7,11 +7,16 @@
 }
 
 :root {
+  --background-color: #e7e7e7;
+  --cards-background-color: #fff;
+  --blocks-background-color: rgb(228, 236, 238);
+  --box-shadow-value: 0 3px 10px rgba(0, 0, 0, 0.2);
   --main-border-radius: 10px;
   --secondary-border-radius: 5px;
 }
 
 body {
+  background-color: var(--background-color);
   font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
@@ -40,40 +45,42 @@ body {
 
 .block-container {
   display: flex;
+  flex-direction: column;
   border-radius: var(--main-border-radius);
   height: 100%;
   width: 100%;
   padding: 10px;
   margin: 0 10px;
-  background-color: aquamarine;
+  box-shadow: var(--box-shadow-value);
+  background-color: var(--blocks-background-color);
 }
 
-.search {
+.search-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-radius: var(--secondary-border-radius);
   height: auto;
   width: 100%;
-  background-color: black;
 }
 
-.search input {
+.search-container input {
   width: 100%;
-  border-radius: var(--secondary-border-radius);
   padding: 5px;
   margin: 5px;
   border: none;
   outline: none;
   font-size: 26px;
+  box-shadow: var(--box-shadow-value);
 }
 
-.search button {
-  border-radius: var(--secondary-border-radius);
+.search-container button {
   padding: 10px;
   margin: 5px;
   border: none;
   font-size: 18px;
+  box-shadow: var(--box-shadow-value);
+  background-color: var(--cards-background-color);
 }
 
 .content {
@@ -84,17 +91,26 @@ body {
   border-radius: var(--secondary-border-radius);
   height: 300px;
   width: 100%;
-  background-color: black;
 }
 
 .content__today {
   display: flex;
   flex-direction: column;
-  border-radius: var(--secondary-border-radius);
-  height: 49%;
+  border-radius: var(--main-border-radius);
+  height: 58%;
   width: 100%;
   padding: 10px;
-  background-color: wheat;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: var(--cards-background-color);
+}
+
+.today-degrees {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.today-degrees .fa-solid {
+  font-size: inherit;
 }
 
 .content__hourly {
@@ -103,9 +119,8 @@ body {
   justify-content: center;
   align-items: center;
   border-radius: var(--secondary-border-radius);
-  height: 49%;
+  height: 40%;
   width: 100%;
-  background-color: wheat;
 }
 
 .hour {
@@ -117,19 +132,18 @@ body {
   padding: 5px;
   height: 95%;
   width: 100%;
-  border-radius: var(--secondary-border-radius);
-  background-color: black;
-  color: white;
+  /* border-radius: var(--secondary-border-radius); */
+  background-color: var(--cards-background-color);
+  box-shadow: var(--box-shadow-value);
 }
 
 .map {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: var(--main-border-radius);
   width: 100%;
   height: 100%;
-  background-color: black;
 }
 
 .map h2 {
@@ -138,7 +152,9 @@ body {
 }
 
 .weekdays-title {
-  margin: 0 5px;
+  font-size: 22px;
+  margin: 0 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 .week__content {
@@ -150,7 +166,6 @@ body {
   padding: 5px;
   height: 100%;
   width: 100%;
-  background-color: wheat;
 }
 
 .weekday {
@@ -159,13 +174,27 @@ body {
   justify-content: space-around;
   padding: 5px;
   margin: 0 3px;
-  border-radius: var(--secondary-border-radius);
   height: 200px;
   width: 100%;
-  background-color: black;
-  color: white;
+  box-shadow: var(--box-shadow-value);
+  background-color: var(--cards-background-color);
+}
+
+.weekday__temperature-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Various font size */
+.weekday .fa-solid {
+  font-size: 40px;
 }
 
 .fa-solid {
   font-size: 24px;
+}
+
+.font-18 {
+  font-size: 18px;
+  font-weight: bold;
 }

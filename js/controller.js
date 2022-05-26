@@ -12,7 +12,7 @@ const controlForecast = async function () {
     query ? await model.loadLocation(query) : await model.loadLocation();
 
     const hourlyCards = model.state.forecast.hourlyCardsData.time;
-    const weeklyCards = model.state.forecast.weeklyCardsData.weekDay;
+    const weeklyCards = model.state.forecast.weeklyCardsData.weekDaytimeTemp;
 
     todayView.render(model.state.forecast);
     mapView.render(model.state.forecast);
