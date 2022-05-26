@@ -1,5 +1,5 @@
 import * as model from './model.js';
-import todayView from './views/TodayView.js';
+import todayView from './views/todayView.js';
 import perHourView from './views/perHourView.js';
 import weekView from './views/weekView.js';
 import mapView from './views/mapView.js';
