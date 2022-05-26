@@ -15,11 +15,11 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css"
     />
+    <link rel="stylesheet" href="css/style.css" />
     <script
       defer
       src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"
     ></script>
-    <link rel="stylesheet" href="css/style.css" />
     <script defer src="js/controller.js" type="module"></script>
     <title>Weather Forecast App</title>
   </head>
@@ -29,7 +29,11 @@
       <div class="row-container">
         <div class="block-container">
           <form class="search-container" id="search">
-            <input class="search__field" type="text" />
+            <input
+              class="search__field"
+              type="text"
+              placeholder="Enter country name..."
+            />
             <button>Search</button>
           </form>
         </div>

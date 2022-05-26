@@ -11,9 +11,10 @@ class MapView extends View {
 
   _loadMap(lat, lng) {
     const map = L.map('map').setView([lat, lng], 10);
-    L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png').addTo(
-      map
-    );
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
   }
 
   render(data) {

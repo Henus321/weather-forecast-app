@@ -66,21 +66,23 @@ body {
 
 .search-container input {
   width: 100%;
-  padding: 5px;
+  padding: 5px 10px;
   margin: 5px;
   border: none;
   outline: none;
-  font-size: 26px;
+  font-size: 20px;
   box-shadow: var(--box-shadow-value);
+  font-family: 'Poppins', sans-serif;
 }
 
 .search-container button {
-  padding: 10px;
+  padding: 7px;
   margin: 5px;
   border: none;
   font-size: 18px;
   box-shadow: var(--box-shadow-value);
   background-color: var(--cards-background-color);
+  font-family: 'Poppins', sans-serif;
 }
 
 .content {
@@ -99,7 +101,7 @@ body {
   border-radius: var(--main-border-radius);
   height: 58%;
   width: 100%;
-  padding: 10px;
+  padding: 10px 15px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   background-color: var(--cards-background-color);
 }
@@ -172,7 +174,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding: 5px;
+  padding: 5px 5px 5px 10px;
   margin: 0 3px;
   height: 200px;
   width: 100%;
