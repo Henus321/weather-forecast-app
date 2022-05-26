@@ -16,39 +16,42 @@ export const state = {
   },
 };
 
-export const loadLocation = async function (searchValue = 'moscow') {
+export const loadLocation = async function (searchValue = 'tokyo') {
   try {
     const responce = await fetch(`${GEO_API_URL}${searchValue}`);
     const data = await responce.json();
     const searchResult = data.results[0];
     const cityName = searchResult.name;
-    const lat = searchResult.latitude;
-    const lng = searchResult.longitude;
+    const latlang = [searchResult.latitude, searchResult.longitude];
     const timezone = searchResult.timezone;
-    await loadTimeByZone(timezone);
-    await loadForecast(lat, lng, cityName);
+    const timezoneSplit = timezone.split('/');
+    const exactTime = await loadExactTime(timezone);
+    await loadForecast(latlang, cityName, timezoneSplit, exactTime);
   } catch (err) {
     console.error(`${err}💥`);
   }
 };
 
-const loadTimeByZone = async function (timezone) {
+const loadExactTime = async function (timezone) {
   try {
     const responce = await fetch(`${TIMEZONE_API_URL}${timezone}`);
     const data = await responce.json();
-    console.log(data);
+    const exactTime = data.datetime.slice(0, 16);
+    return exactTime;
   } catch (err) {
     console.error(err);
   }
 };
 
-const loadForecast = async function (lat, lng, cityName) {
+const loadForecast = async function (latlng, cityName, timezone, exactTime) {
+  const [lat, lng] = latlng;
+  const [cont, city] = timezone;
   try {
     const responce = await fetch(
-      `${METEO_API_URL}latitude=${lat}&longitude=${lng}&hourly=temperature_2m,weathercode&current_weather=true&windspeed_unit=ms&timeformat=unixtime`
+      `${METEO_API_URL}latitude=${lat}&longitude=${lng}&hourly=temperature_2m,weathercode&current_weather=true&windspeed_unit=ms&timezone=${cont}%2F${city}`
     );
     const data = await responce.json();
-    state.forecast = createForecastObject(data, cityName);
+    state.forecast = createForecastObject(data, cityName, exactTime);
     // console.log(data);
     // console.log(state.forecast);
   } catch (err) {
@@ -56,26 +59,19 @@ const loadForecast = async function (lat, lng, cityName) {
   }
 };
 
-const createForecastObject = function (data, cityName) {
-  const currentDate = convertDate(new Date());
-
+const createForecastObject = function (data, cityName, exactTime) {
   // Current date index research
-  const currentUnixTime = data.current_weather.time;
+  const currentTime = data.current_weather.time;
   const allWeekTime = data.hourly.time;
   const allWeekTemp = data.hourly.temperature_2m;
   const allWeatherCodes = data.hourly.weathercode;
-  const match = (item) => item === currentUnixTime;
-  const currentTimeIndex = allWeekTime.findIndex(match);
+  const curIndexMatch = (item) => item === currentTime;
+  const currentTimeIndex = allWeekTime.findIndex(curIndexMatch);
+  console.log(currentTimeIndex);
 
   // Hourly Cards Data
   const lastTimeIndex = currentTimeIndex + HOUR_CARDS_QUANTITY;
-  const hourlyCardsUnixTime = allWeekTime.slice(
-    currentTimeIndex,
-    lastTimeIndex
-  );
-  const hourlyCardsTime = hourlyCardsUnixTime.map((time) =>
-    convertDate(new Date(time * 1000))
-  );
+  const hourlyCardsTime = allWeekTime.slice(currentTimeIndex, lastTimeIndex);
   const hourlyCardsTemperature = allWeekTemp.slice(
     currentTimeIndex,
     lastTimeIndex
@@ -84,12 +80,10 @@ const createForecastObject = function (data, cityName) {
     currentTimeIndex,
     lastTimeIndex
   );
+  console.log(hourlyCardsWeatherCode);
 
   // Weekly Cards Data
-  const weekDays = allWeekTime
-    .filter((_, idx) => idx % 24 === 0)
-    .map((day) => convertDate(new Date(day * 1000)));
-
+  const weekDays = allWeekTime.filter((_, idx) => idx % 24 === 0);
   // need Local time, not Moscow
   // Week Day temp and Evening temp arrays
   const weekTemp = allWeekTemp.filter((_, idx) => idx % 24 === 0);
@@ -98,7 +92,7 @@ const createForecastObject = function (data, cityName) {
   return {
     currentWeather: {
       temperature: data.current_weather.temperature,
-      time: currentDate,
+      time: exactTime,
       weatherCode: data.current_weather.weathercode,
       windSpeed: data.current_weather.windspeed,
     },
