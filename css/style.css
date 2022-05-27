@@ -117,7 +117,6 @@ body {
 
 .content__hourly {
   display: flex;
-  flex-direction: row-reverse;
   justify-content: center;
   align-items: center;
   border-radius: var(--secondary-border-radius);
@@ -161,7 +160,6 @@ body {
 
 .week__content {
   display: flex;
-  flex-direction: row-reverse;
   justify-content: center;
   align-items: center;
   border-radius: var(--secondary-border-radius);

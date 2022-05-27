@@ -4,24 +4,25 @@ import { weatherCodeToIcon } from './../helpers.js';
 class WeekView extends View {
   _parentElement = document.querySelector('.week__content');
 
-  _generateMarkup(data, idx) {
-    const weekDay = data.weekDays[idx];
-    const day = data.weekDates[idx].slice(5, -6);
-    const daytimeTemp = data.weekDaytimeTemp[idx];
-    const nighttimeTemp = data.weekNighttimeTemp[idx];
-    const weatherIcon = weatherCodeToIcon(data.weekWeatherCodes[idx]);
-    return `
+  _generateMarkup() {
+    const markup = String(
+      this._data.map(
+        (data) => `
     <div class="weekday">
-        <span class="font-18">${weekDay}</span>
-        <span>${day}</span>
-        <span>${weatherIcon}</i></span>
-        <div class="weekday__temperature-container">
-          <strong>Day: ${daytimeTemp}°C</strong>
-          <small>Night: ${nighttimeTemp}°C</small>
-        </div>
-
+    <span class="font-18">${data.weekdays}</span>
+      <span>${data.weekDates}</span>
+      <span>${data.weekWeatherCodes}</span>
+      <div class="weekday__temperature-container">
+        <strong>Day: ${data.weekDaytimeTemp}°C</strong>
+        <small>Night: ${data.weekNighttimeTemp}°C</small>
       </div>
-    `;
+    </div>
+    `
+      )
+    )
+      .split(',')
+      .join('');
+    return markup;
   }
 }
 

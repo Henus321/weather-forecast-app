@@ -4,7 +4,7 @@ import {
   TIMEZONE_API_URL,
   HOUR_CARDS_QUANTITY,
 } from './config.js';
-import { convertDate } from './helpers.js';
+import { weatherCodeToIcon } from './helpers.js';
 
 export const state = {
   forecast: {
@@ -74,11 +74,34 @@ const convertDayOfWeek = function (idx) {
   return weekdayName.filter((_, dayWeekIdx) => dayWeekIdx === idx - 1);
 };
 
+const convertDateToMonth = function (idx) {
+  const monthName = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  return monthName.filter((_, monthIdx) => monthIdx === idx);
+};
+
 const createForecastObject = function (data, cityName, exactDate) {
   // Exact Time
   const [exactTime, rawDayOfWeek] = exactDate;
   const exactDayOfWeek = convertDayOfWeek(rawDayOfWeek);
 
+  const currentLocation = {
+    latitude: data.latitude,
+    longitude: data.longitude,
+    name: cityName,
+  };
   // Current date index research
   const currentTime = data.current_weather.time;
   const allWeekTime = data.hourly.time;
@@ -87,25 +110,44 @@ const createForecastObject = function (data, cityName, exactDate) {
   const curIndexMatch = (item) => item === currentTime;
   const currentTimeIndex = allWeekTime.findIndex(curIndexMatch);
 
+  const currentWeather = {
+    temperature: data.current_weather.temperature,
+    time: exactTime,
+    dayOfWeek: exactDayOfWeek,
+    weatherCode: data.current_weather.weathercode,
+    windSpeed: data.current_weather.windspeed,
+  };
   // Hourly Cards Data
   const lastTimeIndex = currentTimeIndex + HOUR_CARDS_QUANTITY;
-  const hourlyCardsTime = allWeekTime.slice(currentTimeIndex, lastTimeIndex);
+  const hourlyCardsTime = allWeekTime
+    .map((time) => time.slice(-5).trim())
+    .slice(currentTimeIndex, lastTimeIndex);
   const hourlyCardsTemperature = allWeekTemp.slice(
     currentTimeIndex,
     lastTimeIndex
   );
-  const hourlyCardsWeatherCode = allWeatherCodes.slice(
-    currentTimeIndex,
-    lastTimeIndex
-  );
+  const hourlyCardsWeatherCode = allWeatherCodes
+    .slice(currentTimeIndex, lastTimeIndex)
+    .map((code) => weatherCodeToIcon(code));
+
+  const hourlyCardsData = hourlyCardsTime.map((_, idx) => {
+    return {
+      time: hourlyCardsTime[idx],
+      temperature: hourlyCardsTemperature[idx],
+      weatherCode: hourlyCardsWeatherCode[idx],
+    };
+  });
 
   // Weekly Cards Data
-  const weekDates = allWeekTime.filter((_, idx) => (idx - 15) % 24 === 0);
+  const weekDates = allWeekTime
+    .filter((_, idx) => (idx - 15) % 24 === 0)
+    .map((date) => date.slice(5, -6).trim());
   const weekDaytimeTemp = allWeekTemp.filter((_, idx) => (idx - 15) % 24 === 0);
   const weekNightimeTemp = allWeekTemp.filter((_, idx) => (idx - 3) % 24 === 0);
-  const weekWeatherCodes = allWeatherCodes.filter(
-    (_, idx) => (idx - 15) % 24 === 0
-  );
+  const weekWeatherCodes = allWeatherCodes
+    .filter((_, idx) => (idx - 15) % 24 === 0)
+    .map((code) => weatherCodeToIcon(code));
+
   const weekdayName = [
     'Monday',
     'Tuesday',
@@ -117,41 +159,21 @@ const createForecastObject = function (data, cityName, exactDate) {
   ];
   const weekPart1 = weekdayName.slice(rawDayOfWeek - 1);
   const weekPart2 = weekdayName.slice(0, rawDayOfWeek - 1);
-  const weekDays = [...weekPart1, ...weekPart2];
+  const weekdays = [...weekPart1, ...weekPart2];
+  const weekdayCardsData = weekdays.map((_, idx) => {
+    return {
+      weekDates: weekDates[idx],
+      weekdays: weekdays[idx],
+      weekDaytimeTemp: weekDaytimeTemp[idx],
+      weekNighttimeTemp: weekNightimeTemp[idx],
+      weekWeatherCodes: weekWeatherCodes[idx],
+    };
+  });
 
   return {
-    currentWeather: {
-      temperature: data.current_weather.temperature,
-      time: exactTime,
-      dayOfWeek: exactDayOfWeek,
-      weatherCode: data.current_weather.weathercode,
-      windSpeed: data.current_weather.windspeed,
-    },
-    currentLocation: {
-      latitude: data.latitude,
-      longitude: data.longitude,
-      name: cityName,
-    },
-    weekForecast: {
-      time: data.hourly.time,
-      temperature: data.hourly.temperature_2m,
-    },
-    hourlyCardsData: {
-      time: hourlyCardsTime,
-      temperature: hourlyCardsTemperature,
-      weatherCode: hourlyCardsWeatherCode,
-    },
-    weeklyCardsData: {
-      weekDates: weekDates,
-      weekDays: weekDays,
-      weekDaytimeTemp: weekDaytimeTemp,
-      weekNighttimeTemp: weekNightimeTemp,
-      weekWeatherCodes: weekWeatherCodes,
-    },
+    currentWeather,
+    currentLocation,
+    hourlyCardsData,
+    weekdayCardsData,
   };
 };
-
-// Утро — с 06:00 до 12:00 часов (часть суток после пробуждения).
-// День — с 12:00 до 18:00 часов (пик рабочей активности).
-// Вечер — с 18:00 до 00:00 часов (время отдыха после работы).
-// Ночь — с 00:00 до 06:00 часов (время сна).
