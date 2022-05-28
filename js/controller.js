@@ -4,6 +4,7 @@ import perHourView from './views/perHourView.js';
 import weekView from './views/weekView.js';
 import mapView from './views/mapView.js';
 import searchView from './views/searchView.js';
+import errorView from './views/errorView.js';
 
 const controlForecast = async function () {
   try {
@@ -15,7 +16,7 @@ const controlForecast = async function () {
     perHourView.render(model.state.forecast.hourlyCardsData);
     weekView.render(model.state.forecast.weekdayCardsData);
   } catch (err) {
-    console.log(err);
+    errorView.render(err.message);
   }
 };
 

@@ -8,7 +8,7 @@ class WeekView extends View {
       this._data.map(
         (data) => `
     <div class="weekday">
-      <span class="font-18">${data.weekdays}</span>
+      <span class="weekday-title">${data.weekdays}</span>
       <span class="weekday-item">${data.weekDates}</span>
       <span "weekday-item">${data.weekWeatherCodes}</span>
       <div class="weekday-item weekday__temperature-container">

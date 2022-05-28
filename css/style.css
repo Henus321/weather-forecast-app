@@ -9,14 +9,13 @@
 :root {
   --background-color: #e7e7e7;
   --cards-background-color: #fff;
-  --blocks-background-color: rgb(228, 236, 238);
+  --blocks-background-color: rgb(90, 140, 233);
   --box-shadow-value: 0 3px 10px rgba(0, 0, 0, 0.2);
   --main-border-radius: 10px;
   --secondary-border-radius: 5px;
 }
 
 body {
-  background-color: var(--background-color);
   font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
@@ -28,82 +27,100 @@ body {
   margin: 10px;
 }
 .container {
-  width: 1000px;
+  width: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.row-container {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.block-container {
+.content-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   border-radius: var(--main-border-radius);
   height: 100%;
   width: 100%;
-  padding: 10px;
   margin: 0 10px;
   box-shadow: var(--box-shadow-value);
-  background-color: var(--blocks-background-color);
 }
 
 .search-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  border-radius: var(--secondary-border-radius);
-  height: auto;
-  width: 100%;
+  border-radius: var(--main-border-radius);
+  height: 100%;
+  width: 50rem;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: var(--box-shadow-value);
+  background-color: var(--blocks-background-color);
 }
 
 .search-container input {
   width: 100%;
   padding: 5px 10px;
-  margin: 5px;
+  margin: 0 10px;
   border: none;
   outline: none;
-  font-size: 20px;
+  font-size: 1rem;
+  height: 100%;
   box-shadow: var(--box-shadow-value);
   font-family: 'Poppins', sans-serif;
 }
 
 .search-container button {
   padding: 7px;
-  margin: 5px;
+  margin-right: 10px;
   border: none;
-  font-size: 18px;
+  font-size: 1rem;
   box-shadow: var(--box-shadow-value);
   background-color: var(--cards-background-color);
   font-family: 'Poppins', sans-serif;
 }
 
+.error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 0.9rem;
+  box-shadow: var(--box-shadow-value);
+  background-color: var(--blocks-background-color);
+}
+
 .content {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  padding-top: 5px;
   border-radius: var(--secondary-border-radius);
-  height: 300px;
+  height: 100%;
   width: 100%;
+}
+
+.content-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .content__today {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   border-radius: var(--main-border-radius);
-  height: 58%;
-  width: 100%;
+  width: 23rem;
+  height: 100%;
   padding: 10px 15px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  margin: 10px;
   background-color: var(--cards-background-color);
+  background-size: cover;
+  color: #fff;
 }
 
 .today-degrees {
@@ -119,22 +136,29 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 10px;
   border-radius: var(--secondary-border-radius);
-  height: 40%;
-  width: 100%;
+  height: 100%;
 }
 
 .hour {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   margin: 0 3px;
   padding: 5px;
-  height: 95%;
-  width: 100%;
+  height: 5rem;
+  width: 3.5rem;
+  font-size: 0.8rem;
   background-color: var(--cards-background-color);
   box-shadow: var(--box-shadow-value);
+}
+
+.map-container {
+  margin: 10px;
+  width: 23rem;
+  height: 16.5rem;
 }
 
 .map {
@@ -154,7 +178,7 @@ body {
 }
 
 .weekdays-title {
-  font-size: 22px;
+  font-size: 1.3rem;
   margin: 0 10px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
@@ -164,7 +188,7 @@ body {
   justify-content: center;
   align-items: center;
   border-radius: var(--secondary-border-radius);
-  padding: 5px;
+  margin: 10px 0 15px 0;
   height: 100%;
   width: 100%;
 }
@@ -174,10 +198,11 @@ body {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  font-size: 0.7rem;
   padding: 10px 5px 5px;
   margin: 0 3px;
   height: 100%;
-  width: 100%;
+  width: 6.5rem;
   box-shadow: var(--box-shadow-value);
   background-color: var(--cards-background-color);
 }
@@ -195,14 +220,18 @@ body {
 
 /* Various font size */
 .weekday .fa-solid {
-  font-size: 40px;
+  font-size: 2rem;
 }
 
 .fa-solid {
-  font-size: 24px;
+  font-size: 1.5rem;
 }
 
-.font-18 {
-  font-size: 18px;
+.weekday-title {
+  font-size: 0.85rem;
   font-weight: bold;
+}
+
+.hidden {
+  display: none;
 }

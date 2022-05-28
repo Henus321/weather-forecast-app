@@ -27,7 +27,10 @@ export const loadLocation = async function (searchValue = 'berlin') {
     const exactDate = await loadExactTime(timezone);
     await loadForecast(latlang, cityName, timezoneSplit, exactDate);
   } catch (err) {
-    console.error(`${err}💥`);
+    console.log(err.message);
+    throw new Error(
+      "Woops! Can't find country with that name... try another one"
+    );
   }
 };
 
@@ -40,7 +43,7 @@ const loadExactTime = async function (timezone) {
     const exactDate = [exactTime, exactDayOfWeek];
     return exactDate;
   } catch (err) {
-    console.error(err);
+    throw new Error("Woops! Can't load timezone... try again later");
   }
 };
 
@@ -56,7 +59,7 @@ const loadForecast = async function (latlng, cityName, timezone, exactDate) {
     // console.log(data);
     // console.log(state.forecast);
   } catch (err) {
-    console.error(`${err}💥`);
+    throw new Error("Woops! Can't load forecast... try again later");
   }
 };
 
@@ -114,12 +117,16 @@ const createForecastObject = function (data, cityName, exactDate) {
     data.current_weather.weathercode
   );
 
+  const exactHour = exactTime.slice(0, 2);
+  const timeOfDay = exactHour > 7 && exactHour < 20 ? 'day' : 'night';
+
   const currentWeather = {
     temperature: data.current_weather.temperature,
     time: exactTime,
     dayOfWeek: exactDayOfWeek,
     weatherCode: currentWeatherIcon,
     windSpeed: data.current_weather.windspeed,
+    timeOfDay: timeOfDay,
   };
 
   // Hourly Cards Data
