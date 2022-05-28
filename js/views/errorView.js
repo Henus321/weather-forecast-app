@@ -1,7 +1,7 @@
 import View from './View.js';
 
 class ErrorView extends View {
-  _parentElement = document.querySelector('.error-container');
+  _parentElement = document.querySelector('.container__error');
 
   _generateMarkup() {
     this._hideContent();
@@ -13,7 +13,7 @@ class ErrorView extends View {
   _hideContent() {
     this._parentElement.classList.remove('hidden');
     this._parentElement.parentElement
-      .querySelector('.content-container')
+      .querySelector('.container__content')
       .classList.add('hidden');
   }
 }

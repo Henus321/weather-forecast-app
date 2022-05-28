@@ -4,7 +4,7 @@ class SearchView extends View {
   _parentElement = document.getElementById('search');
 
   getQuery() {
-    const query = this._parentElement.querySelector('.search__field').value;
+    const query = this._parentElement.querySelector('.search-field').value;
     this._clearInput();
     this._revealContent();
     return query;
@@ -12,15 +12,15 @@ class SearchView extends View {
 
   _revealContent() {
     this._parentElement.parentElement
-      .querySelector('.content-container')
+      .querySelector('.container__content')
       .classList.remove('hidden');
     this._parentElement.parentElement
-      .querySelector('.error-container')
+      .querySelector('.container__error')
       .classList.add('hidden');
   }
 
   _clearInput() {
-    this._parentElement.querySelector('.search__field').value = '';
+    this._parentElement.querySelector('.search-field').value = '';
   }
 
   addHandlerSearch(handler) {

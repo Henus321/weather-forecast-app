@@ -1,12 +1,18 @@
 import View from './View.js';
 
 class MapView extends View {
-  _parentElement = document.querySelector('.map-container');
+  _parentElement = document.querySelector('.content-map');
 
   _generateMarkup() {
     return `
     <div class="map" id="map"></div>
     `;
+  }
+
+  _getPosition() {
+    navigator.geolocation.getCurrentPosition(success, error, {
+      enableHighAccuracy: true,
+    });
   }
 
   _loadMap(lat, lng) {

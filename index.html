@@ -26,26 +26,25 @@
   <body>
     <div class="container">
       <h2 class="title">Weather Forecast App</h2>
-      <form class="search-container" id="search">
+      <form class="container__search" id="search">
         <input
-          class="search__field"
+          class="search-field"
           type="text"
           placeholder="Enter country name..."
           maxlength="40"
         />
         <button>Search</button>
       </form>
-      <div class="error-container hidden"></div>
-      <div class="content-container hidden">
+      <div class="container__error hidden"></div>
+      <div class="container__content hidden">
         <div class="content">
-          <div class="content-block">
-            <div class="content__today"></div>
-            <div class="content__hourly"></div>
+          <div class="content-today">
+            <div class="today-card"></div>
+            <div class="hourly-cards"></div>
           </div>
-          <div class="map-container"></div>
+          <div class="content-map"></div>
         </div>
-        <h3 class="weekdays-title">Forecast for the week</h3>
-        <div class="week__content"></div>
+        <div class="content-week"></div>
       </div>
     </div>
   </body>

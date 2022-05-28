@@ -1,17 +1,17 @@
 import View from './View.js';
 
 class WeekView extends View {
-  _parentElement = document.querySelector('.week__content');
+  _parentElement = document.querySelector('.content-week');
 
   _generateMarkup() {
-    const markup = String(
+    const weekCards = String(
       this._data.map(
         (data) => `
-    <div class="weekday">
+    <div class="weekly-item">
       <span class="weekday-title">${data.weekdays}</span>
-      <span class="weekday-item">${data.weekDates}</span>
-      <span "weekday-item">${data.weekWeatherCodes}</span>
-      <div class="weekday-item weekday__temperature-container">
+      <span>${data.weekDates}</span>
+      <span>${data.weekWeatherCodes}</span>
+      <div class="temperature-container">
         <strong>Day: ${data.weekDaytimeTemp}°C</strong>
         <small>Night: ${data.weekNighttimeTemp}°C</small>
       </div>
@@ -21,6 +21,12 @@ class WeekView extends View {
     )
       .split(',')
       .join('');
+    const markup = `
+    <h3 class="week-title ">Forecast for the week</h3>
+    <div class="weekly-cards">
+    ${weekCards}
+    </div>
+     `;
     return markup;
   }
 }

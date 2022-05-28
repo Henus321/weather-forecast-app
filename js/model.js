@@ -27,7 +27,6 @@ export const loadLocation = async function (searchValue = 'berlin') {
     const exactDate = await loadExactTime(timezone);
     await loadForecast(latlang, cityName, timezoneSplit, exactDate);
   } catch (err) {
-    console.log(err.message);
     throw new Error(
       "Woops! Can't find country with that name... try another one"
     );

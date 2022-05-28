@@ -1,7 +1,7 @@
 import View from './View.js';
 
 class TodayView extends View {
-  _parentElement = document.querySelector('.content__today');
+  _parentElement = document.querySelector('.today-card');
 
   _generateMarkup() {
     this._backroundImage();
@@ -12,7 +12,7 @@ class TodayView extends View {
         <span>${this._data.currentWeather.temperature}°C</span>
         <span>${this._data.currentWeather.weatherCode}</span>
         </div>
-        <span class="today-item">wind: ${this._data.currentWeather.windSpeed} m/s</span>
+        <span class="today-item"><i class="fa-solid fa-wind"></i> wind: ${this._data.currentWeather.windSpeed} m/s</span>
     `;
   }
 
