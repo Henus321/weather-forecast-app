@@ -1,5 +1,4 @@
 import View from './View.js';
-import { weatherCodeToIcon } from './../helpers.js';
 
 class WeekView extends View {
   _parentElement = document.querySelector('.week__content');
@@ -9,10 +8,10 @@ class WeekView extends View {
       this._data.map(
         (data) => `
     <div class="weekday">
-    <span class="font-18">${data.weekdays}</span>
-      <span>${data.weekDates}</span>
-      <span>${data.weekWeatherCodes}</span>
-      <div class="weekday__temperature-container">
+      <span class="font-18">${data.weekdays}</span>
+      <span class="weekday-item">${data.weekDates}</span>
+      <span "weekday-item">${data.weekWeatherCodes}</span>
+      <div class="weekday-item weekday__temperature-container">
         <strong>Day: ${data.weekDaytimeTemp}°C</strong>
         <small>Night: ${data.weekNighttimeTemp}°C</small>
       </div>

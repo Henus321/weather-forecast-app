@@ -22,10 +22,7 @@ class MapView extends View {
     const markup = this._generateMarkup();
     this.clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
-    this._loadMap(
-      this._data.currentLocation.latitude,
-      this._data.currentLocation.longitude
-    );
+    this._loadMap(this._data.latitude, this._data.longitude);
   }
 }
 

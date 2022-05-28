@@ -10,9 +10,8 @@ export const state = {
   forecast: {
     currentWeather: {},
     currentLocation: {},
-    weekForecast: {},
-    hourlyCards: {},
-    weeklyCards: {},
+    hourlyCardsData: {},
+    weekdayCardsData: {},
   },
 };
 
@@ -89,13 +88,15 @@ const convertDateToMonth = function (idx) {
     'November',
     'December',
   ];
-  return monthName.filter((_, monthIdx) => monthIdx === idx);
+  const [correctMonth] = monthName.filter((_, monthIdx) => monthIdx === idx);
+  return correctMonth;
 };
 
 const createForecastObject = function (data, cityName, exactDate) {
   // Exact Time
-  const [exactTime, rawDayOfWeek] = exactDate;
+  const [rawExactTime, rawDayOfWeek] = exactDate;
   const exactDayOfWeek = convertDayOfWeek(rawDayOfWeek);
+  const exactTime = rawExactTime.slice(11);
 
   const currentLocation = {
     latitude: data.latitude,
@@ -109,14 +110,18 @@ const createForecastObject = function (data, cityName, exactDate) {
   const allWeatherCodes = data.hourly.weathercode;
   const curIndexMatch = (item) => item === currentTime;
   const currentTimeIndex = allWeekTime.findIndex(curIndexMatch);
+  const currentWeatherIcon = weatherCodeToIcon(
+    data.current_weather.weathercode
+  );
 
   const currentWeather = {
     temperature: data.current_weather.temperature,
     time: exactTime,
     dayOfWeek: exactDayOfWeek,
-    weatherCode: data.current_weather.weathercode,
+    weatherCode: currentWeatherIcon,
     windSpeed: data.current_weather.windspeed,
   };
+
   // Hourly Cards Data
   const lastTimeIndex = currentTimeIndex + HOUR_CARDS_QUANTITY;
   const hourlyCardsTime = allWeekTime
@@ -160,9 +165,20 @@ const createForecastObject = function (data, cityName, exactDate) {
   const weekPart1 = weekdayName.slice(rawDayOfWeek - 1);
   const weekPart2 = weekdayName.slice(0, rawDayOfWeek - 1);
   const weekdays = [...weekPart1, ...weekPart2];
+
+  const correctFormatDate = weekDates.map((date) =>
+    date.slice(0, 1) === '0' ? date.slice(1) : date
+  );
+  const exactMonthName = correctFormatDate.map((date) =>
+    convertDateToMonth(Number(date.slice(0, -3)))
+  );
+  const exactDay = weekDates.map((date) => date.slice(3));
+  const convertedDayMonth = exactMonthName.map((name, idx) =>
+    [name, exactDay[idx]].join(',').replace(',', ' ')
+  );
   const weekdayCardsData = weekdays.map((_, idx) => {
     return {
-      weekDates: weekDates[idx],
+      weekDates: convertedDayMonth[idx],
       weekdays: weekdays[idx],
       weekDaytimeTemp: weekDaytimeTemp[idx],
       weekNighttimeTemp: weekNightimeTemp[idx],

@@ -11,7 +11,7 @@ const controlForecast = async function () {
     query ? await model.loadLocation(query) : await model.loadLocation();
 
     todayView.render(model.state.forecast);
-    mapView.render(model.state.forecast);
+    mapView.render(model.state.forecast.currentLocation);
     perHourView.render(model.state.forecast.hourlyCardsData);
     weekView.render(model.state.forecast.weekdayCardsData);
   } catch (err) {

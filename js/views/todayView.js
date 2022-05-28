@@ -1,5 +1,4 @@
 import View from './View.js';
-import { weatherCodeToIcon } from './../helpers.js';
 
 class TodayView extends View {
   _parentElement = document.querySelector('.content__today');
@@ -7,12 +6,10 @@ class TodayView extends View {
   _generateMarkup() {
     return `
         <h2>${this._data.currentLocation.name}</h2>
-        <span>${this._data.currentWeather.dayOfWeek} ${
-      this._data.currentWeather.time
-    }</span>
+        <span>Today ${this._data.currentWeather.dayOfWeek} ${this._data.currentWeather.time}</span>
         <div class="today-degrees">
         <span>${this._data.currentWeather.temperature}°C</span>
-        <span>${weatherCodeToIcon(this._data.currentWeather.weatherCode)}</span>
+        <span>${this._data.currentWeather.weatherCode}</span>
         </div>
         <span>wind: ${this._data.currentWeather.windSpeed} m/s</span>
     `;
