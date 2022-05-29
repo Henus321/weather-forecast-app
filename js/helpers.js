@@ -1,5 +1,3 @@
-export const toggleLoader = function () {};
-
 export const convertDate = function (data) {
   const monthName = [
     'January',

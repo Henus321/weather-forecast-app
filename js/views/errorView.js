@@ -6,7 +6,7 @@ class ErrorView extends View {
   _generateMarkup() {
     this._hideContent();
     return `
-        <span>${this._data}</span>
+        <span class="error-text">${this._data}</span>
     `;
   }
 

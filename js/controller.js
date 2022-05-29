@@ -5,6 +5,7 @@ import weekView from './views/weekView.js';
 import mapView from './views/mapView.js';
 import searchView from './views/searchView.js';
 import errorView from './views/errorView.js';
+import exampleView from './views/exampleView.js';
 
 const controlForecast = async function () {
   try {
@@ -15,6 +16,7 @@ const controlForecast = async function () {
     mapView.render(model.state.forecast.currentLocation);
     perHourView.render(model.state.forecast.hourlyCardsData);
     weekView.render(model.state.forecast.weekdayCardsData);
+    perHourView.moveButtons();
   } catch (err) {
     errorView.render(err.message);
   }
@@ -22,6 +24,7 @@ const controlForecast = async function () {
 
 const init = function () {
   searchView.addHandlerSearch(controlForecast);
+  exampleView.addHandlerSearch(controlForecast);
   controlForecast();
 };
 init();

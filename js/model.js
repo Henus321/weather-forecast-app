@@ -15,7 +15,7 @@ export const state = {
   },
 };
 
-export const loadLocation = async function (searchValue = 'berlin') {
+export const loadLocation = async function (searchValue = 'dubai') {
   try {
     const responce = await fetch(`${GEO_API_URL}${searchValue}`);
     const data = await responce.json();
@@ -27,9 +27,7 @@ export const loadLocation = async function (searchValue = 'berlin') {
     const exactDate = await loadExactTime(timezone);
     await loadForecast(latlang, cityName, timezoneSplit, exactDate);
   } catch (err) {
-    throw new Error(
-      "Woops! Can't find country with that name... try another one"
-    );
+    throw new Error("Woops! Can't find city with that name... try another one");
   }
 };
 
