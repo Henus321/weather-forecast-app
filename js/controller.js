@@ -7,16 +7,20 @@ import searchView from './views/searchView.js';
 import errorView from './views/errorView.js';
 import exampleView from './views/exampleView.js';
 
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+import { async } from 'regenerator-runtime';
+
 const controlForecast = async function () {
   try {
     const query = searchView.getQuery();
-    query ? await model.loadLocation(query) : await model.loadLocation();
+    await model.loadLocation(query);
 
     todayView.render(model.state.forecast);
     mapView.render(model.state.forecast.currentLocation);
     perHourView.render(model.state.forecast.hourlyCardsData);
     weekView.render(model.state.forecast.weekdayCardsData);
-    perHourView.moveButtons();
+    perHourView.scrollButtons();
   } catch (err) {
     errorView.render(err.message);
   }
@@ -25,6 +29,5 @@ const controlForecast = async function () {
 const init = function () {
   searchView.addHandlerSearch(controlForecast);
   exampleView.addHandlerSearch(controlForecast);
-  controlForecast();
 };
 init();

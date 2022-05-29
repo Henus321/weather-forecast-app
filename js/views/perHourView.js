@@ -30,7 +30,7 @@ class PerHourView extends View {
      `;
     return markup;
   }
-  moveButtons() {
+  scrollButtons() {
     const btnForward = this._parentElement.querySelector('.btn-forward');
     const btnBack = this._parentElement.querySelector('.btn-back');
     const hourlyCards = this._parentElement.querySelector('.hourly-cards');
@@ -40,7 +40,7 @@ class PerHourView extends View {
       this._parentElement.querySelectorAll('.hourly-item').length;
     let idx = 0;
 
-    const move = function () {
+    const scroll = function () {
       if (idx > cardsQuantity / 2) {
         idx = cardsQuantity / 2;
       }
@@ -52,7 +52,7 @@ class PerHourView extends View {
 
     btnBack.addEventListener('click', () => {
       idx--;
-      move();
+      scroll();
       if (idx === 0) {
         leftArrow.style.color = '#d3d3d3';
       } else {
@@ -62,7 +62,7 @@ class PerHourView extends View {
 
     btnForward.addEventListener('click', () => {
       idx++;
-      move();
+      scroll();
       if (idx === cardsQuantity / 2) {
         rightArrow.style.color = '#d3d3d3';
       } else {
