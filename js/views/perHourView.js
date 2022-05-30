@@ -30,7 +30,8 @@ class PerHourView extends View {
      `;
     return markup;
   }
-  scrollButtons() {
+
+  _scrollListeners() {
     const btnForward = this._parentElement.querySelector('.btn-forward');
     const btnBack = this._parentElement.querySelector('.btn-back');
     const hourlyCards = this._parentElement.querySelector('.hourly-cards');
@@ -69,6 +70,14 @@ class PerHourView extends View {
         leftArrow.style.color = '#3b3b3b';
       }
     });
+  }
+
+  render(data) {
+    this._data = data;
+    const markup = this._generateMarkup();
+    this.clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+    this._scrollListeners();
   }
 }
 

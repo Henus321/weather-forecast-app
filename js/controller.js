@@ -20,7 +20,6 @@ const controlForecast = async function () {
     mapView.render(model.state.forecast.currentLocation);
     perHourView.render(model.state.forecast.hourlyCardsData);
     weekView.render(model.state.forecast.weekdayCardsData);
-    perHourView.scrollButtons();
   } catch (err) {
     errorView.render(err.message);
   }
