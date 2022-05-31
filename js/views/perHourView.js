@@ -51,16 +51,14 @@ class PerHourView extends View {
       idx += point;
       idx > HOUR_CARDS_QUANTITY / 2 ? (idx = HOUR_CARDS_QUANTITY / 2) : false;
       idx < 0 ? (idx = 0) : false;
-      if (point === 1) {
-        idx === HOUR_CARDS_QUANTITY / 2
-          ? (rightArrow.style.color = '#d3d3d3')
-          : (leftArrow.style.color = '#3b3b3b');
-      }
-      if (point === -1) {
-        idx === 0
-          ? (leftArrow.style.color = '#d3d3d3')
-          : (rightArrow.style.color = '#3b3b3b');
-      }
+      point === 1 && idx === HOUR_CARDS_QUANTITY / 2
+        ? (rightArrow.style.color = '#d3d3d3')
+        : (leftArrow.style.color = '#3b3b3b');
+
+      point === -1 && idx === 0
+        ? (leftArrow.style.color = '#d3d3d3')
+        : (rightArrow.style.color = '#3b3b3b');
+
       hourlyCards.style.transform = `translateX(${-idx}0%)`;
     };
   }
