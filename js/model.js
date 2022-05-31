@@ -86,7 +86,12 @@ const createCurrentTimeObject = function (data) {
 };
 
 const createTodayForecastObject = function (data) {
-  weatherIcon = weatherCodeToIcon(data.current_weather.weathercode);
+  const currentHour = data.current_weather.time.slice(11, 13);
+  const currentDayTime = convertHourToDaytime(currentHour);
+  const weatherIcon = weatherCodeToIcon(
+    data.current_weather.weathercode,
+    currentDayTime
+  );
   return {
     temperature: data.current_weather.temperature,
     weatherIcon: weatherIcon,
@@ -103,12 +108,12 @@ const createHourlyCardsObject = function (data) {
   const hourlyCardsTime = allWeekTime
     .slice(currentTimeIndex, lastTimeIndex)
     .map((time) => time.slice(-5).trim());
-  const hourlyCardsDaytime = hourlyCardsTime
+  const hourlyCardsDayTime = hourlyCardsTime
     .map((time) => time.slice(0, 2))
     .map((time) => convertHourToDaytime(time));
   const hourlyCardsWeatherIcons = data.hourly.weathercode
     .slice(currentTimeIndex, lastTimeIndex)
-    .map((code, idx) => weatherCodeToIcon(code, hourlyCardsDaytime[idx]));
+    .map((code, idx) => weatherCodeToIcon(code, hourlyCardsDayTime[idx]));
   const hourlyCardsTemperature = data.hourly.temperature_2m.slice(
     currentTimeIndex,
     lastTimeIndex
@@ -147,7 +152,7 @@ const createWeekDayCardsObject = function (data, forecast) {
     .map((date) => (date.slice(0, 1) === '0' ? date.slice(1) : date))
     .map((date) => convertDateToMonth(Number(date.slice(0, -3))));
   const currentDateOfMonth = allWeekDates.map((date) => date.slice(3));
-  const CurrentDayAndMonth = currentDateMonthName.map((name, idx) =>
+  const currentDayAndMonth = currentDateMonthName.map((name, idx) =>
     [name, currentDateOfMonth[idx]].join(',').replace(',', ' ')
   );
   return {
@@ -155,6 +160,6 @@ const createWeekDayCardsObject = function (data, forecast) {
     weekNighttimeTemp: weekNightimeTemp,
     weekWeatherIcons: weekWeatherIcons,
     weekDays: currentWeekDays,
-    weekDates: CurrentDayAndMonth,
+    weekDates: currentDayAndMonth,
   };
 };
