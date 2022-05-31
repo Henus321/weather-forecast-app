@@ -5,15 +5,15 @@ class WeekView extends View {
 
   _generateMarkup() {
     const weekCards = String(
-      this._data.map(
-        (data) => `
+      this._data.weekDays.map(
+        (_, idx) => `
     <div class="weekly-item">
-      <span class="weekday-title">${data.weekdays}</span>
-      <span>${data.weekDates}</span>
-      <span>${data.weekWeatherCodes}</span>
+      <span class="weekday-title">${this._data.weekDays[idx]}</span>
+      <span>${this._data.weekDates[idx]}</span>
+      <span>${this._data.weekWeatherIcons[idx]}</span>
       <div class="temperature-container">
-        <strong>Day: ${data.weekDaytimeTemp}°C</strong>
-        <small>Night: ${data.weekNighttimeTemp}°C</small>
+        <strong>Day: ${this._data.weekDaytimeTemp[idx]}°C</strong>
+        <small>Night: ${this._data.weekNighttimeTemp[idx]}°C</small>
       </div>
     </div>
     `

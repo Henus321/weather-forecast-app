@@ -5,12 +5,12 @@ class PerHourView extends View {
 
   _generateMarkup() {
     const hourCards = String(
-      this._data.map(
-        (data) => `
+      this._data.time.map(
+        (_, idx) => `
     <div class="hourly-item">
-      <span>${data.time}</span>
-      <span>${data.weatherCode}</span>
-      <span>${data.temperature}°C</span>
+      <span>${this._data.time[idx]}</span>
+      <span>${this._data.weatherIcons[idx]}</span>
+      <span>${this._data.temperature[idx]}°C</span>
     </div>
     `
       )

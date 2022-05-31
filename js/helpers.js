@@ -1,3 +1,9 @@
+import { DAWN_TIME, DUSK_TIME } from './config';
+
+export const convertHourToDaytime = function (time) {
+  return time > DAWN_TIME && time < DUSK_TIME ? 'day' : 'night';
+};
+
 export const convertDateToMonth = function (idx) {
   const monthName = [
     'January',
@@ -27,7 +33,10 @@ export const convertDayOfWeek = function (idx) {
     'Saturday',
     'Sunday',
   ];
-  return weekdayName.filter((_, dayWeekIdx) => dayWeekIdx === idx - 1);
+  const [correctWeekday] = weekdayName.filter(
+    (_, dayWeekIdx) => dayWeekIdx === idx - 1
+  );
+  return correctWeekday;
 };
 
 export const weatherCodeToIcon = function (weatherCode, timeOfDay) {

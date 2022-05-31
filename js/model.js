@@ -3,26 +3,27 @@ import {
   GEO_API_URL,
   TIMEZONE_API_URL,
   HOUR_CARDS_QUANTITY,
-  DAWN_TIME,
-  DUSK_TIME,
   DELAY_TO_DAYTIME,
   DELAY_TO_NIGHTTIME,
   HOURS_PER_DAY,
+  WEEK_DAY_NAMES,
 } from './config.js';
 import {
   weatherCodeToIcon,
   convertDateToMonth,
   convertDayOfWeek,
+  convertHourToDaytime,
 } from './helpers.js';
 
 import { async } from 'regenerator-runtime';
 
 export const state = {
   forecast: {
-    currentWeather: {},
-    currentLocation: {},
+    location: {},
+    currentTime: {},
+    todayForecast: {},
     hourlyCardsData: {},
-    weekdayCardsData: {},
+    weekDayCardsData: {},
   },
 };
 
@@ -30,153 +31,130 @@ export const loadLocation = async function (searchValue) {
   try {
     const responce = await fetch(`${GEO_API_URL}${searchValue}`);
     const data = await responce.json();
-    const searchResult = data.results[0];
-    const cityName = searchResult.name;
-    const latlang = [searchResult.latitude, searchResult.longitude];
-    const timezone = searchResult.timezone;
-    const timezoneSplit = timezone.split('/');
-    const exactDate = await loadExactTime(timezone);
-    await loadForecast(latlang, cityName, timezoneSplit, exactDate);
+    state.forecast.location = createLocationObject(data);
   } catch (err) {
-    throw new Error("Woops! Can't find city with that name... try another one");
+    throw new Error(`Woops! Can't load city with that name... ${err.message}`);
   }
 };
 
-const loadExactTime = async function (timezone) {
+export const loadCurrentTime = async function (timezone) {
   try {
     const responce = await fetch(`${TIMEZONE_API_URL}${timezone}`);
     const data = await responce.json();
-    const exactTime = data.datetime.slice(0, 16);
-    const exactDayOfWeek = data.day_of_week;
-    const exactDate = [exactTime, exactDayOfWeek];
-    return exactDate;
+    state.forecast.currentTime = createCurrentTimeObject(data);
   } catch (err) {
-    throw new Error("Woops! Can't load timezone... try again later");
+    throw new Error(`Woops! Can't load timezone... ${err.message}`);
   }
 };
 
-const loadForecast = async function (latlng, cityName, timezone, exactDate) {
-  const [lat, lng] = latlng;
-  const [cont, city] = timezone;
+export const loadForecast = async function (forecast) {
+  const [continent, city] = forecast.location.timezone.split('/');
   try {
     const responce = await fetch(
-      `${METEO_API_URL}latitude=${lat}&longitude=${lng}&hourly=temperature_2m,weathercode&current_weather=true&windspeed_unit=ms&timezone=${cont}%2F${city}`
+      `${METEO_API_URL}latitude=${forecast.location.latitude}&longitude=${forecast.location.longitude}&hourly=temperature_2m,weathercode&current_weather=true&windspeed_unit=ms&timezone=${continent}%2F${city}`
     );
     const data = await responce.json();
-    state.forecast = createForecastObject(data, cityName, exactDate);
+    state.forecast.todayForecast = createTodayForecastObject(data);
+    state.forecast.hourlyCardsData = createHourlyCardsObject(data);
+    state.forecast.weekDayCardsData = createWeekDayCardsObject(data, forecast);
   } catch (err) {
-    throw new Error("Woops! Can't load forecast... try again later");
+    throw new Error(`Woops! Can't load forecast... ${err.message}`);
   }
 };
 
-const createForecastObject = function (data, cityName, exactDate) {
-  // Exact Time
-  const [rawExactTime, rawDayOfWeek] = exactDate;
-  const exactDayOfWeek = convertDayOfWeek(rawDayOfWeek);
-  const exactTime = rawExactTime.slice(11);
-
-  const currentLocation = {
-    latitude: data.latitude,
-    longitude: data.longitude,
-    name: cityName,
+const createLocationObject = function (data) {
+  const location = data.results[0];
+  return {
+    name: location.name,
+    timezone: location.timezone,
+    latitude: location.latitude,
+    longitude: location.longitude,
   };
-  // Current date index research
-  const currentTime = data.current_weather.time;
-  const allWeekTime = data.hourly.time;
-  const allWeekTemp = data.hourly.temperature_2m;
-  const allWeatherCodes = data.hourly.weathercode;
-  const curIndexMatch = (item) => item === currentTime;
-  const currentTimeIndex = allWeekTime.findIndex(curIndexMatch);
+};
 
-  const exactHour = exactTime.slice(0, 2);
-  const timeOfDay =
-    exactHour > DAWN_TIME && exactHour < DUSK_TIME ? 'day' : 'night';
-  const currentWeatherIcon = weatherCodeToIcon(
-    data.current_weather.weathercode,
-    timeOfDay
-  );
-  const currentWeather = {
-    temperature: data.current_weather.temperature,
-    time: exactTime,
-    dayOfWeek: exactDayOfWeek,
-    weatherCode: currentWeatherIcon,
-    windSpeed: data.current_weather.windspeed,
+const createCurrentTimeObject = function (data) {
+  const currentTime = data.datetime.slice(11, 16);
+  const currentHour = data.datetime.slice(11, 13);
+  const timeOfDay = convertHourToDaytime(currentHour);
+  const dayOfWeek = convertDayOfWeek(data.day_of_week);
+  return {
+    time: currentTime,
     timeOfDay: timeOfDay,
+    dayOfWeek: dayOfWeek,
+    dayOfWeekIndex: data.day_of_week,
   };
+};
 
-  // Hourly Cards Data
+const createTodayForecastObject = function (data) {
+  weatherIcon = weatherCodeToIcon(data.current_weather.weathercode);
+  return {
+    temperature: data.current_weather.temperature,
+    weatherIcon: weatherIcon,
+    windSpeed: data.current_weather.windspeed,
+  };
+};
+
+const createHourlyCardsObject = function (data) {
+  const allWeekTime = data.hourly.time;
+  const currentTimeIndex = allWeekTime.findIndex(
+    (item) => item === data.current_weather.time
+  );
   const lastTimeIndex = currentTimeIndex + HOUR_CARDS_QUANTITY;
   const hourlyCardsTime = allWeekTime
-    .map((time) => time.slice(-5).trim())
-    .slice(currentTimeIndex, lastTimeIndex);
+    .slice(currentTimeIndex, lastTimeIndex)
+    .map((time) => time.slice(-5).trim());
   const hourlyCardsDaytime = hourlyCardsTime
     .map((time) => time.slice(0, 2))
-    .map((time) => (time > DAWN_TIME && time < DUSK_TIME ? 'day' : 'night'));
-  const hourlyCardsTemperature = allWeekTemp.slice(
+    .map((time) => convertHourToDaytime(time));
+  const hourlyCardsWeatherIcons = data.hourly.weathercode
+    .slice(currentTimeIndex, lastTimeIndex)
+    .map((code, idx) => weatherCodeToIcon(code, hourlyCardsDaytime[idx]));
+  const hourlyCardsTemperature = data.hourly.temperature_2m.slice(
     currentTimeIndex,
     lastTimeIndex
   );
-  const hourlyCardsWeatherCode = allWeatherCodes
-    .slice(currentTimeIndex, lastTimeIndex)
-    .map((code, idx) => weatherCodeToIcon(code, hourlyCardsDaytime[idx]));
-  const hourlyCardsData = hourlyCardsTime.map((_, idx) => {
-    return {
-      time: hourlyCardsTime[idx],
-      temperature: hourlyCardsTemperature[idx],
-      weatherCode: hourlyCardsWeatherCode[idx],
-    };
-  });
+  return {
+    time: hourlyCardsTime,
+    weatherIcons: hourlyCardsWeatherIcons,
+    temperature: hourlyCardsTemperature,
+  };
+};
 
-  // Weekly Cards Data
-  const weekDates = allWeekTime
-    .filter((_, idx) => (idx - DELAY_TO_DAYTIME) % HOURS_PER_DAY === 0)
-    .map((date) => date.slice(5, -6).trim());
+const createWeekDayCardsObject = function (data, forecast) {
+  const allWeekTime = data.hourly.time;
+  const allWeekTemp = data.hourly.temperature_2m;
+  const allWeatherCodes = data.hourly.weathercode;
+  const currentDayOfWeekIndex = forecast.currentTime.dayOfWeekIndex;
+
   const weekDaytimeTemp = allWeekTemp.filter(
     (_, idx) => (idx - DELAY_TO_DAYTIME) % HOURS_PER_DAY === 0
   );
   const weekNightimeTemp = allWeekTemp.filter(
     (_, idx) => (idx - DELAY_TO_NIGHTTIME) % HOURS_PER_DAY === 0
   );
-  const weekWeatherCodes = allWeatherCodes
+  const weekWeatherIcons = allWeatherCodes
     .filter((_, idx) => (idx - DELAY_TO_DAYTIME) % HOURS_PER_DAY === 0)
     .map((code) => weatherCodeToIcon(code));
-
-  const weekdayName = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ];
-  const exactWeekdays = [
-    ...weekdayName.slice(rawDayOfWeek - 1),
-    ...weekdayName.slice(0, rawDayOfWeek - 1),
+  const currentWeekDays = [
+    ...WEEK_DAY_NAMES.slice(currentDayOfWeekIndex - 1),
+    ...WEEK_DAY_NAMES.slice(0, currentDayOfWeekIndex - 1),
   ];
 
-  const exactMonthName = weekDates
+  const allWeekDates = allWeekTime
+    .filter((_, idx) => (idx - DELAY_TO_DAYTIME) % HOURS_PER_DAY === 0)
+    .map((date) => date.slice(5, -6).trim());
+  const currentDateMonthName = allWeekDates
     .map((date) => (date.slice(0, 1) === '0' ? date.slice(1) : date))
     .map((date) => convertDateToMonth(Number(date.slice(0, -3))));
-  const exactDay = weekDates.map((date) => date.slice(3));
-  const convertedDayMonth = exactMonthName.map((name, idx) =>
-    [name, exactDay[idx]].join(',').replace(',', ' ')
+  const currentDateOfMonth = allWeekDates.map((date) => date.slice(3));
+  const CurrentDayAndMonth = currentDateMonthName.map((name, idx) =>
+    [name, currentDateOfMonth[idx]].join(',').replace(',', ' ')
   );
-
-  const weekdayCardsData = exactWeekdays.map((_, idx) => {
-    return {
-      weekDates: convertedDayMonth[idx],
-      weekdays: exactWeekdays[idx],
-      weekDaytimeTemp: weekDaytimeTemp[idx],
-      weekNighttimeTemp: weekNightimeTemp[idx],
-      weekWeatherCodes: weekWeatherCodes[idx],
-    };
-  });
-
   return {
-    currentWeather,
-    currentLocation,
-    hourlyCardsData,
-    weekdayCardsData,
+    weekDaytimeTemp: weekDaytimeTemp,
+    weekNighttimeTemp: weekNightimeTemp,
+    weekWeatherIcons: weekWeatherIcons,
+    weekDays: currentWeekDays,
+    weekDates: CurrentDayAndMonth,
   };
 };

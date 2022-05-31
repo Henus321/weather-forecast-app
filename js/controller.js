@@ -13,13 +13,15 @@ import { async } from 'regenerator-runtime';
 
 const controlForecast = async function () {
   try {
-    const query = searchView.getQuery();
-    await model.loadLocation(query);
+    const state = model.state.forecast;
+    await model.loadLocation(searchView.getQuery());
+    await model.loadCurrentTime(state.location.timezone);
+    await model.loadForecast(state);
 
-    todayView.render(model.state.forecast);
-    mapView.render(model.state.forecast.currentLocation);
-    perHourView.render(model.state.forecast.hourlyCardsData);
-    weekView.render(model.state.forecast.weekdayCardsData);
+    todayView.render(state);
+    mapView.render(state.location);
+    perHourView.render(state.hourlyCardsData);
+    weekView.render(state.weekDayCardsData);
   } catch (err) {
     errorView.render(err.message);
   }

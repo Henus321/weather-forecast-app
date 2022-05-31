@@ -6,18 +6,18 @@ class TodayView extends View {
   _generateMarkup() {
     this._backroundImage();
     return `
-        <h2 class="today-item">${this._data.currentLocation.name}</h2>
-        <span class="today-item">Today ${this._data.currentWeather.dayOfWeek} ${this._data.currentWeather.time}</span>
+        <h2 class="today-item">${this._data.location.name}</h2>
+        <span class="today-item">Today ${this._data.currentTime.dayOfWeek} ${this._data.currentTime.time}</span>
         <div class="today-item today-degrees">
-        <span>${this._data.currentWeather.temperature}°C</span>
-        <span>${this._data.currentWeather.weatherCode}</span>
+        <span>${this._data.todayForecast.temperature}°C</span>
+        <span>${this._data.todayForecast.weatherIcon}</span>
         </div>
-        <span class="today-item"><i class="fa-solid fa-wind"></i> wind: ${this._data.currentWeather.windSpeed} m/s</span>
+        <span class="today-item"><i class="fa-solid fa-wind"></i> wind: ${this._data.todayForecast.windSpeed} m/s</span>
     `;
   }
 
   _backroundImage() {
-    this._data.currentWeather.timeOfDay === 'day'
+    this._data.currentTime.timeOfDay === 'day'
       ? (this._parentElement.style.background =
           'url(https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80)')
       : (this._parentElement.style.background =

@@ -154,7 +154,6 @@ body {
   height: 100%;
   color: #fff;
   border-radius: var(--main-border-radius);
-  background-color: var(--cards-background-color);
   background-size: cover;
 }
 
