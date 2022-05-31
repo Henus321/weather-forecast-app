@@ -26,7 +26,7 @@ class MapView extends View {
   render(data) {
     this._data = data;
     const markup = this._generateMarkup();
-    this.clear();
+    this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
     this._loadMap(this._data.latitude, this._data.longitude);
   }

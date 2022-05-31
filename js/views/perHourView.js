@@ -1,4 +1,5 @@
 import View from './View.js';
+import { HOUR_CARDS_QUANTITY } from './../config.js';
 
 class PerHourView extends View {
   _parentElement = document.querySelector('.hourly__container');
@@ -32,50 +33,42 @@ class PerHourView extends View {
   }
 
   _scrollListeners() {
-    const btnForward = this._parentElement.querySelector('.btn-forward');
-    const btnBack = this._parentElement.querySelector('.btn-back');
     const hourlyCards = this._parentElement.querySelector('.hourly-cards');
     const leftArrow = this._parentElement.querySelector('.fa-caret-left');
     const rightArrow = this._parentElement.querySelector('.fa-caret-right');
-    const cardsQuantity =
-      this._parentElement.querySelectorAll('.hourly-item').length;
+
+    const cardPerClick = 1;
     let idx = 0;
 
-    const scroll = function () {
-      if (idx > cardsQuantity / 2) {
-        idx = cardsQuantity / 2;
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      btn.classList.value === 'btn-forward' ? _scroll(cardPerClick) : false;
+      btn.classList.value === 'btn-back' ? _scroll(-cardPerClick) : false;
+    });
+
+    const _scroll = function (point) {
+      idx += point;
+      idx > HOUR_CARDS_QUANTITY / 2 ? (idx = HOUR_CARDS_QUANTITY / 2) : false;
+      idx < 0 ? (idx = 0) : false;
+      if (point === 1) {
+        idx === HOUR_CARDS_QUANTITY / 2
+          ? (rightArrow.style.color = '#d3d3d3')
+          : (leftArrow.style.color = '#3b3b3b');
       }
-      if (idx < 0) {
-        idx = 0;
+      if (point === -1) {
+        idx === 0
+          ? (leftArrow.style.color = '#d3d3d3')
+          : (rightArrow.style.color = '#3b3b3b');
       }
       hourlyCards.style.transform = `translateX(${-idx}0%)`;
     };
-
-    btnBack.addEventListener('click', () => {
-      idx--;
-      scroll();
-      if (idx === 0) {
-        leftArrow.style.color = '#d3d3d3';
-      } else {
-        rightArrow.style.color = '#3b3b3b';
-      }
-    });
-
-    btnForward.addEventListener('click', () => {
-      idx++;
-      scroll();
-      if (idx === cardsQuantity / 2) {
-        rightArrow.style.color = '#d3d3d3';
-      } else {
-        leftArrow.style.color = '#3b3b3b';
-      }
-    });
   }
 
   render(data) {
     this._data = data;
     const markup = this._generateMarkup();
-    this.clear();
+    this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
     this._scrollListeners();
   }
