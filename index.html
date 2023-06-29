@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"
+    ></script>
+    <script defer src="js/controller.js" type="module"></script>
+    <title>Weather Forecast App</title>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="title">Weather Forecast App</h2>
+      <form class="container__search" id="search">
+        <input
+          class="search-field"
+          type="text"
+          placeholder="Enter country name..."
+          maxlength="40"
+        />
+        <button>Search</button>
+      </form>
+      <div class="container__examples">
+        <span
+          >Example: <span class="example-item">Tokyo</span>,
+          <span class="example-item">Dubai</span>,
+          <span class="example-item">Amsterdam</span></span
+        >
+      </div>
+      <div class="container__error hidden"></div>
+      <div class="container__content hidden">
+        <div class="content">
+          <div class="content-today">
+            <div class="today-card"></div>
+
+            <div class="hourly__container">
+              <div class="hourly-cards"></div>
+            </div>
+          </div>
+          <div class="content-map"></div>
+        </div>
+        <div class="content-week"></div>
+      </div>
+    </div>
+  </body>
+</html>
